@@ -12,9 +12,19 @@
 
     private string serverFilter = "";
 
+    public void ClearFilter()
+    {
+        this.serverFilter = string.Empty;
+    }
+
     private void HandleSearch()
     {
         SearchServerCallback.InvokeAsync(serverFilter);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine($"SearchBarComponent: OnAfterRender called. FirstRender: {firstRender}");
     }
 
 }

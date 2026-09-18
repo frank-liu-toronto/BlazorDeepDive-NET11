@@ -20,6 +20,11 @@
 
     private string selectedCity = "Toronto";
 
+    public void ClearSelection()
+    {
+        this.selectedCity = string.Empty;        
+    }
+
     private List<String> cities = CitiesRepository.GetCities();
 
     private void HandleCitySelection(string cityName)
