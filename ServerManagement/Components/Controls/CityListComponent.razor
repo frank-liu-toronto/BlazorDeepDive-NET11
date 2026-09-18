@@ -23,6 +23,7 @@
     public void ClearSelection()
     {
         this.selectedCity = string.Empty;        
+        StateHasChanged();
     }
 
     private List<String> cities = CitiesRepository.GetCities();

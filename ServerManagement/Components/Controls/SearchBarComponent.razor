@@ -15,6 +15,7 @@
     public void ClearFilter()
     {
         this.serverFilter = string.Empty;
+        StateHasChanged();
     }
 
     private void HandleSearch()
