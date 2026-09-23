@@ -1,4 +1,5 @@
 ﻿@page "/servers"
+@page "/servers/back_from/{cityName}"
 
 @rendermode InteractiveServer
 
@@ -8,7 +9,8 @@
 <br/>
 <br/>
 <CityListComponent @ref="cityListComponent"
-                   SelectCityCallback="HandleCitySelection"></CityListComponent>
+                   SelectCityCallback="HandleCitySelection"
+                   selectedCity="@this.selectedCity"></CityListComponent>
 
 <br />
 
@@ -30,6 +32,8 @@
 
 
 @code {
+    [Parameter]
+    public string? CityName { get; set; }
 
     private List<String> cities = CitiesRepository.GetCities();
 
@@ -50,5 +54,13 @@
     {   
         this.searchFilter = searchFilter;
         cityListComponent?.ClearSelection();
+    }
+
+    override protected void OnParametersSet()
+    {
+        if (NavigationManager.Uri.Contains("back_from") && !string.IsNullOrEmpty(CityName))
+        {
+            selectedCity = CityName!;
+        }
     }
 }
