@@ -44,6 +44,18 @@
     private bool searchFilterChanged = false;
     private bool cityNameChanged = false;
 
+    private System.Threading.Timer? refreshTimer;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        refreshTimer = new System.Threading.Timer(async _ =>
+        {
+            await base.InvokeAsync(StateHasChanged);
+        }, null, 5000, 5000);
+    }
+
     public override Task SetParametersAsync(ParameterView parameters)
     {
         
