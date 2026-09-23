@@ -26,7 +26,17 @@
         StateHasChanged();
     }
 
-    private List<String> cities = CitiesRepository.GetCities();
+    private List<String>? cities;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (RendererInfo.IsInteractive)
+        {
+            cities = CitiesRepository.GetCities();
+        }
+    }
 
     private void HandleCitySelection(string cityName)
     {
