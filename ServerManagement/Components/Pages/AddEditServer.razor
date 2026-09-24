@@ -71,7 +71,14 @@ else
     protected override void OnParametersSet()
     {
         if (this.Id.HasValue)
+        {
             server ??= ServersRepository.GetServerById(this.Id.Value);
+
+            if (server is null)
+            {
+                NavigationManager.NotFound();
+            }
+        }
         else
             server ??= new Server() { IsOnline = false };
     }
