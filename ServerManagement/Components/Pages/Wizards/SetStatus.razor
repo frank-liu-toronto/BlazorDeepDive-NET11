@@ -1,8 +1,10 @@
 ﻿@page "/serverstatus"
+@using ServerManagement.StateStore
 
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
+@inject SessionStorage sessionStorage
 
 <h3>Server Status</h3>
 <br />
@@ -14,64 +16,50 @@
 }
 
 
-<FieldComponent Label="Server Status">
-	<Control>
-		<input type="checkbox"
-			   @bind-value="isOnline"
-			   class="form-check-input"></input>
-	</Control>
-</FieldComponent>
-<br />
-<button type="button" class="btn btn-primary" @onclick="Save">Save</button>
+@if (server is not null)
+{
+    <FieldComponent Label="Server Status">
+        <Control>
+            @if (server.IsOnline)
+            {
+                <input type="checkbox"
+                       @bind-value="server.IsOnline"
+                       checked class="form-check-input"></input>
+            }
+            else
+            {
+                <input type="checkbox"
+                       @bind-value="server.IsOnline"
+                       class="form-check-input"></input>
+            }
+		</Control>
+	</FieldComponent>
+	<br />
+	<button type="button" class="btn btn-primary" @onclick="Save">Save</button>
+}
 
 
 @code {
 
-	private string? errorMessage; private bool isOnline;
+	private Server? server;
 
-	[SupplyParameterFromQuery]
-	public string? ServerName { get; set; }
+	private string? errorMessage; 
 
-	[SupplyParameterFromQuery]
-	public string? CityName { get; set; }
-
-	protected override void OnAfterRender(bool firstRender)
+	protected override async Task OnInitializedAsync()
 	{
-		if (firstRender)
+		if (RendererInfo.IsInteractive)
 		{
-			if (string.IsNullOrWhiteSpace(ServerName))
-			{
-				this.errorMessage = "Server name wasn't provided.";
-				StateHasChanged();
-			}
-			else if (string.IsNullOrWhiteSpace(CityName))
-			{
-				this.errorMessage = "City name wasn't provided.";
-				StateHasChanged();
-			}
+			this.server = await this.sessionStorage.GetServerAsync();
 		}
 	}
 
-	private void Save()
-	{
-		if (string.IsNullOrWhiteSpace(ServerName))
-		{
-			this.errorMessage = "Server name wasn't provided.";
-			return;
-		}
-		else if (string.IsNullOrWhiteSpace(CityName))
-		{
-			this.errorMessage = "City name wasn't provided.";
-			return;
-		}
-
-		var server = new Server
-		{
-			Name = this.ServerName,
-			City = this.CityName,
-			IsOnline = this.isOnline
-		};
-		ServersRepository.AddServer(server);
-		NavigationManager.NavigateTo($"/servers/back_from/{CityName}");
-	}
+    private async Task Save()
+    {
+        if (server is not null)
+        {
+            await sessionStorage.SetServerAsync(null);
+            ServersRepository.AddServer(server);
+            NavigationManager.NavigateTo($"/servers/back_from/{this.server?.City}");
+        }
+    }
 }
