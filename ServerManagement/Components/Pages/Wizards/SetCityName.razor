@@ -4,7 +4,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
-@inject SessionStorage sessionStorage
+@inject ContainerStorage containerStorage
 
 <h3>City Name</h3>
 <br />
@@ -34,18 +34,13 @@
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
         if (RendererInfo.IsInteractive)
         {
-            this.server = await this.sessionStorage.GetServerAsync();
+            this.server = this.containerStorage.GetServer();
         }
     }
 
-    private async Task GoNext()
+    private void GoNext()
     {
         if (server is not null)
         {
@@ -55,7 +50,7 @@
             }
             else
             {
-                await sessionStorage.SetServerAsync(server);
+                containerStorage.SetServer(server);
                 NavigationManager.NavigateTo("/serverstatus");
             }
         }

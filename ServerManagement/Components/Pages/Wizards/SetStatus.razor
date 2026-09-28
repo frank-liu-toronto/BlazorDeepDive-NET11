@@ -4,7 +4,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
-@inject SessionStorage sessionStorage
+@inject ContainerStorage containerStorage
 
 <h3>Server Status</h3>
 <br />
@@ -45,19 +45,19 @@
 
 	private string? errorMessage; 
 
-	protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
 	{
 		if (RendererInfo.IsInteractive)
 		{
-			this.server = await this.sessionStorage.GetServerAsync();
+            this.server = this.containerStorage.GetServer();
 		}
 	}
 
-    private async Task Save()
+    private void Save()
     {
         if (server is not null)
         {
-            await sessionStorage.SetServerAsync(null);
+            containerStorage.SetServer(null);
             ServersRepository.AddServer(server);
             NavigationManager.NavigateTo($"/servers/back_from/{this.server?.City}");
         }
