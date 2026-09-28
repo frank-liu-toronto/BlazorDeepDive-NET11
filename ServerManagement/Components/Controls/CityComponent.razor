@@ -123,11 +123,24 @@
 
 	public void Dispose()
 	{
-		TorontoOnlineServersStore.RemoveStateChangeListeners(OnTorontoServersStatusChange);
-		MontrealOnlineServersStore.RemoveStateChangeListeners(OnMontrealServersStatusChange);
-		OttawaOnlineServersStore.RemoveStateChangeListeners(OnOttawaServersStatusChange);
-		CalgaryOnlineServersStore.RemoveStateChangeListeners(OnCalgaryServersStatusChange);
-		HalifaxOnlineServersStore.RemoveStateChangeListeners(OnHalifaxServersStatusChange);
+		switch (city)
+		{
+			case "Toronto":
+				TorontoOnlineServersStore.RemoveStateChangeListeners(OnTorontoServersStatusChange);
+				break;
+			case "Montreal":
+				MontrealOnlineServersStore.RemoveStateChangeListeners(OnMontrealServersStatusChange);
+				break;
+			case "Ottawa":
+				OttawaOnlineServersStore.RemoveStateChangeListeners(OnOttawaServersStatusChange);
+				break;
+			case "Calgary":
+				CalgaryOnlineServersStore.RemoveStateChangeListeners(OnCalgaryServersStatusChange);
+				break;
+			case "Halifax":
+				HalifaxOnlineServersStore.RemoveStateChangeListeners(OnHalifaxServersStatusChange);
+				break;
+		}
 	}
 
 }
