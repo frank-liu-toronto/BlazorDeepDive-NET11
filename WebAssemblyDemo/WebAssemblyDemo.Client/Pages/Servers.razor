@@ -56,17 +56,26 @@ else
 <a class="btn btn-primary" href="/wasm/servers/add">Add Server</a>
 
 @code {
+    [PersistentState]
     public List<Server> listServers { get; set; } = new List<Server>();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        if (firstRender)
+        if (listServers == null || listServers.Count <= 0)
         {
-            await Task.Delay(2000);
             listServers = await ServersApiRepository.GetServersAsync();
-            StateHasChanged();
         }
     }
+
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (firstRender)
+    //     {
+    //         await Task.Delay(2000);
+    //         listServers = await ServersApiRepository.GetServersAsync();
+    //         StateHasChanged();
+    //     }
+    // }
 
     private async Task Delete(int serverId)
     {
