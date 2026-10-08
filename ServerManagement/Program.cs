@@ -42,6 +42,11 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Manager", policy => policy.RequireClaim("Role", "General Manager"));
+});
+
 var connectionString = builder.Configuration.GetConnectionString("ServerManagement") ?? throw new InvalidOperationException("Connection string 'ServerManagement' not found.");
 builder.Services.AddDbContext<ServerManagementIdentityContext>(options =>
     options.UseSqlServer(connectionString));
